@@ -1,0 +1,802 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Кибербезопасность для школьников</title>
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%234da6ff' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z'/%3E%3C/svg%3E">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', 'Segoe UI', Roboto, Arial, sans-serif;
+        }
+
+        body {
+            background: #0a0e1a;
+            color: #e0e6f0;
+            line-height: 1.6;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        header {
+            background: linear-gradient(135deg, #0f1a2e, #1a2a4a);
+            padding: 20px 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid #1e3a5f;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 22px;
+            font-weight: 800;
+            color: #4da6ff;
+            letter-spacing: 0.5px;
+        }
+
+        .logo svg {
+            width: 36px;
+            height: 36px;
+            animation: pulse 2.5s ease-in-out infinite;
+            filter: drop-shadow(0 0 6px rgba(77, 166, 255, 0.6));
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); filter: drop-shadow(0 0 6px rgba(77, 166, 255, 0.6)); }
+            50% { transform: scale(1.1); filter: drop-shadow(0 0 14px rgba(77, 166, 255, 1)); }
+            100% { transform: scale(1); filter: drop-shadow(0 0 6px rgba(77, 166, 255, 0.6)); }
+        }
+
+        .burger {
+            display: none;
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 8px;
+            flex-direction: column;
+            gap: 5px;
+            z-index: 200;
+        }
+
+        .burger span {
+            display: block;
+            width: 26px;
+            height: 3px;
+            background: #4da6ff;
+            border-radius: 3px;
+            transition: 0.3s;
+        }
+
+        .burger.active span:nth-child(1) { transform: translateY(8px) rotate(45deg); }
+        .burger.active span:nth-child(2) { opacity: 0; }
+        .burger.active span:nth-child(3) { transform: translateY(-8px) rotate(-45deg); }
+
+        nav {
+            display: flex;
+            gap: 18px;
+            flex-wrap: wrap;
+        }
+
+        nav a {
+            color: #a0b4d0;
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 500;
+            padding: 8px 4px;
+            border-bottom: 2px solid transparent;
+            transition: 0.3s;
+        }
+
+        nav a:hover, nav a.active {
+            color: #4da6ff;
+            border-bottom: 2px solid #4da6ff;
+        }
+
+        main {
+            flex: 1;
+            padding: 40px;
+            max-width: 1100px;
+            margin: 0 auto;
+            width: 100%;
+        }
+
+        .page {
+            display: none;
+        }
+
+        .page.active {
+            display: block;
+            animation: smoothAppear 0.7s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+
+        .page.fade-out {
+            animation: smoothDisappear 0.3s ease forwards;
+        }
+
+        @keyframes smoothAppear {
+            0% { opacity: 0; transform: translateY(30px) scale(0.98); filter: blur(6px); }
+            100% { opacity: 1; transform: translateY(0) scale(1); filter: blur(0); }
+        }
+
+        @keyframes smoothDisappear {
+            0% { opacity: 1; transform: translateY(0) scale(1); filter: blur(0); }
+            100% { opacity: 0; transform: translateY(-15px) scale(0.98); filter: blur(4px); }
+        }
+
+        h1 {
+            font-size: 32px;
+            font-weight: 800;
+            color: #ffffff;
+            margin-bottom: 15px;
+            letter-spacing: -0.5px;
+        }
+
+        h2 {
+            font-size: 22px;
+            font-weight: 700;
+            color: #4da6ff;
+            margin-bottom: 15px;
+            margin-top: 30px;
+            letter-spacing: -0.3px;
+        }
+
+        p {
+            color: #b0c4de;
+            margin-bottom: 15px;
+            font-size: 16px;
+            font-weight: 400;
+        }
+
+        .banner {
+            width: 100%;
+            height: 220px;
+            object-fit: cover;
+            border-radius: 16px;
+            margin-bottom: 25px;
+            border: 1px solid #1e3a5f;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.5);
+        }
+
+        .cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+            margin-top: 25px;
+        }
+
+        .card {
+            background: linear-gradient(145deg, #111d33, #0d1525);
+            border: 1px solid #1e3a5f;
+            border-radius: 14px;
+            padding: 25px;
+            transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+            overflow: hidden;
+            opacity: 0;
+            transform: translateY(30px) scale(0.95);
+            filter: blur(8px);
+            animation: cardAppear 1.2s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+
+        .card:nth-child(1) { animation-delay: 0.2s; }
+        .card:nth-child(2) { animation-delay: 0.4s; }
+        .card:nth-child(3) { animation-delay: 0.6s; }
+        .card:nth-child(4) { animation-delay: 0.8s; }
+        .card:nth-child(5) { animation-delay: 1s; }
+        .card:nth-child(6) { animation-delay: 1.2s; }
+
+        @keyframes cardAppear {
+            0% { opacity: 0; transform: translateY(30px) scale(0.95); filter: blur(8px); }
+            100% { opacity: 1; transform: translateY(0) scale(1); filter: blur(0); }
+        }
+
+        .card:hover {
+            border-color: #4da6ff;
+            transform: translateY(-6px) scale(1.02);
+            box-shadow: 0 0 15px rgba(77, 166, 255, 0.3), 0 8px 30px rgba(77, 166, 255, 0.2);
+        }
+
+        .card img {
+            width: 100%;
+            height: 150px;
+            object-fit: cover;
+            border-radius: 10px;
+            margin-bottom: 15px;
+        }
+
+        .card h3 {
+            color: #ffffff;
+            font-size: 19px;
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
+
+        .card p {
+            font-size: 15px;
+            margin-bottom: 0;
+        }
+
+        .card .icon {
+            font-size: 48px;
+            margin-bottom: 15px;
+            display: block;
+            text-align: center;
+        }
+
+        .faq-item {
+            background: linear-gradient(145deg, #111d33, #0d1525);
+            border: 1px solid #1e3a5f;
+            border-radius: 14px;
+            padding: 25px;
+            margin-bottom: 18px;
+            transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+        }
+
+        .faq-item:hover {
+            border-color: #4da6ff;
+            transform: translateY(-3px);
+            box-shadow: 0 0 15px rgba(77, 166, 255, 0.3), 0 8px 30px rgba(77, 166, 255, 0.2);
+        }
+
+        .faq-item h3 {
+            color: #4da6ff;
+            font-size: 18px;
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
+
+        .faq-item p {
+            font-size: 15px;
+            margin-bottom: 0;
+        }
+
+        .form-box {
+            background: #111d33;
+            border: 1px solid #1e3a5f;
+            border-radius: 14px;
+            padding: 35px;
+            max-width: 450px;
+            margin: 30px auto;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.4);
+        }
+
+        .form-box h2 {
+            text-align: center;
+            margin-top: 0;
+            margin-bottom: 25px;
+        }
+
+        .form-group {
+            margin-bottom: 18px;
+        }
+
+        .form-group label {
+            display: block;
+            color: #a0b4d0;
+            font-size: 14px;
+            font-weight: 500;
+            margin-bottom: 6px;
+        }
+
+        .form-group input,
+        .form-group textarea {
+            width: 100%;
+            padding: 12px 15px;
+            background: #0a0e1a;
+            border: 1px solid #1e3a5f;
+            border-radius: 8px;
+            color: #e0e6f0;
+            font-size: 15px;
+            font-family: 'Inter', sans-serif;
+            outline: none;
+            transition: 0.3s;
+        }
+
+        .form-group input:focus,
+        .form-group textarea:focus {
+            border-color: #4da6ff;
+            box-shadow: 0 0 0 3px rgba(77, 166, 255, 0.1);
+        }
+
+        .form-group textarea {
+            resize: vertical;
+            min-height: 100px;
+        }
+
+        .btn {
+            width: 100%;
+            padding: 13px;
+            background: linear-gradient(135deg, #1e5bb8, #4da6ff);
+            border: none;
+            border-radius: 8px;
+            color: #ffffff;
+            font-size: 16px;
+            font-weight: 700;
+            font-family: 'Inter', sans-serif;
+            cursor: pointer;
+            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+            letter-spacing: 0.5px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn:hover {
+            background: linear-gradient(135deg, #4da6ff, #1e5bb8);
+            box-shadow: 0 0 15px rgba(77, 166, 255, 0.6), 0 0 30px rgba(77, 166, 255, 0.4), 0 0 50px rgba(77, 166, 255, 0.2);
+            transform: translateY(-2px);
+        }
+
+        .btn:active {
+            transform: translateY(0);
+            box-shadow: 0 0 10px rgba(77, 166, 255, 0.5), 0 0 20px rgba(77, 166, 255, 0.3);
+        }
+
+        ul {
+            list-style: none;
+            padding-left: 0;
+        }
+
+        ul li {
+            padding: 10px 0 10px 30px;
+            position: relative;
+            color: #b0c4de;
+            border-bottom: 1px solid #1a2a4a;
+        }
+
+        ul li::before {
+            content: '✔';
+            position: absolute;
+            left: 0;
+            color: #4da6ff;
+            font-weight: bold;
+        }
+
+        footer {
+            text-align: center;
+            padding: 25px;
+            border-top: 1px solid #1e3a5f;
+            color: #6a7f9a;
+            font-size: 14px;
+            background: #0a0e1a;
+        }
+
+        .scroll-top {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #1e5bb8, #4da6ff);
+            border: none;
+            color: #ffffff;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(20px);
+            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+            box-shadow: 0 4px 15px rgba(77, 166, 255, 0.4);
+            z-index: 99;
+        }
+
+        .scroll-top svg {
+            width: 24px;
+            height: 24px;
+        }
+
+        .scroll-top.visible {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+        }
+
+        .scroll-top:hover {
+            background: linear-gradient(135deg, #4da6ff, #1e5bb8);
+            box-shadow: 
+                0 0 15px rgba(77, 166, 255, 0.6),
+                0 0 30px rgba(77, 166, 255, 0.4),
+                0 0 50px rgba(77, 166, 255, 0.2);
+            transform: translateY(-4px) scale(1.05);
+        }
+
+        .scroll-top:active {
+            transform: translateY(-2px) scale(1);
+        }
+
+        @media (max-width: 768px) {
+            header {
+                flex-direction: row;
+                justify-content: space-between;
+                padding: 15px 20px;
+                position: relative;
+                flex-wrap: wrap;
+            }
+
+            .burger {
+                display: flex;
+            }
+
+            nav {
+                position: absolute;
+                top: 100%;
+                left: 0;
+                right: 0;
+                background: linear-gradient(135deg, #0f1a2e, #1a2a4a);
+                flex-direction: column;
+                gap: 0;
+                padding: 0;
+                max-height: 0;
+                overflow: hidden;
+                transition: max-height 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+                border-bottom: 1px solid #1e3a5f;
+                box-shadow: 0 8px 20px rgba(0, 0, 0, 0.5);
+                width: 100%;
+            }
+
+            nav.open {
+                max-height: 500px;
+                padding: 10px 0;
+            }
+
+            nav a {
+                padding: 14px 25px;
+                font-size: 15px;
+                border-bottom: 1px solid #1a2a4a;
+                border-left: 3px solid transparent;
+            }
+
+            nav a:hover, nav a.active {
+                border-bottom: 1px solid #1a2a4a;
+                border-left: 3px solid #4da6ff;
+                background: rgba(77, 166, 255, 0.05);
+            }
+
+            main {
+                padding: 20px;
+            }
+
+            h1 {
+                font-size: 26px;
+            }
+
+            .form-box {
+                padding: 25px;
+            }
+
+            .banner {
+                height: 150px;
+            }
+
+            .scroll-top {
+                bottom: 20px;
+                right: 20px;
+                width: 45px;
+                height: 45px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="logo">
+            <svg viewBox="0 0 24 24" fill="none" stroke="#4da6ff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+            </svg>
+            КиберБезопасность
+        </div>
+        <button class="burger" onclick="toggleMenu()" aria-label="Меню">
+            <span></span>
+            <span></span>
+            <span></span>
+        </button>
+        <nav id="mainNav">
+            <a href="#" onclick="showPage('home'); closeMenu();" class="active" id="nav-home">Главная</a>
+            <a href="#" onclick="showPage('threats'); closeMenu();" id="nav-threats">Угрозы</a>
+            <a href="#" onclick="showPage('protection'); closeMenu();" id="nav-protection">Защита</a>
+            <a href="#" onclick="showPage('hygiene'); closeMenu();" id="nav-hygiene">Кибергигиена</a>
+            <a href="#" onclick="showPage('about'); closeMenu();" id="nav-about">О проекте</a>
+            <a href="#" onclick="showPage('faq'); closeMenu();" id="nav-faq">FAQ</a>
+            <a href="#" onclick="showPage('contact'); closeMenu();" id="nav-contact">Контакты</a>
+        </nav>
+    </header>
+
+    <main>
+
+        <!-- ГЛАВНАЯ -->
+        <div class="page active" id="page-home">
+            <img class="banner" src="https://images.unsplash.com/photo-1550751827-4bd374c3f58b?w=1200" alt="Кибербезопасность">
+            <h1>Добро пожаловать!</h1>
+            <p>Этот сайт создан, чтобы помочь школьникам разобраться в основах кибербезопасности. Здесь ты узнаешь, какие угрозы существуют в интернете и как от них защититься.</p>
+            <h2>Почему это важно?</h2>
+            <p>Каждый день миллионы людей становятся жертвами мошенников, вирусов и утечек данных. Школьники — особенно уязвимая группа, потому что много времени проводят в сети и не всегда знают о правилах безопасности.</p>
+            <div class="cards">
+                <div class="card">
+                    <span class="icon">🛡️</span>
+                    <h3>Угрозы</h3>
+                    <p>Узнай, какие опасности поджидают в интернете.</p>
+                </div>
+                <div class="card">
+                    <span class="icon">🔐</span>
+                    <h3>Защита</h3>
+                    <p>Правила, которые помогут сохранить данные в безопасности.</p>
+                </div>
+                <div class="card">
+                    <span class="icon">🧼</span>
+                    <h3>Кибергигиена</h3>
+                    <p>Ежедневные привычки для цифровой безопасности.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- УГРОЗЫ -->
+        <div class="page" id="page-threats">
+            <img class="banner" src="https://images.unsplash.com/photo-1563986768609-322da13575f3?w=1200" alt="Угрозы в интернете">
+            <h1>Основные угрозы</h1>
+            <p>Вот с чем ты можешь столкнуться в интернете:</p>
+            <div class="cards">
+                <div class="card">
+                    <img src="https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?w=400" alt="Фишинг">
+                    <h3>Фишинг</h3>
+                    <p>Мошенники создают поддельные сайты, чтобы выманить твои логины и пароли. Никогда не вводи данные на подозрительных страницах.</p>
+                </div>
+                <div class="card">
+                    <img src="https://images.unsplash.com/photo-1584036561566-baf8f5f1b144?w=400" alt="Вирусы">
+                    <h3>Вирусы</h3>
+                    <p>Вредоносные программы могут попасть на устройство через скачанные файлы или ссылки. Скачивай только из проверенных источников.</p>
+                </div>
+                <div class="card">
+                    <img src="https://images.unsplash.com/photo-1633265486064-086b219458ec?w=400" alt="Пароли">
+                    <h3>Слабые пароли</h3>
+                    <p>Пароль вроде «123456» взламывается за секунду. Используй сложные комбинации букв, цифр и символов.</p>
+                </div>
+                <div class="card">
+                    <img src="https://images.unsplash.com/photo-1611162617213-7d7a39e9b1d7?w=400" alt="Соцсети">
+                    <h3>Мошенничество в соцсетях</h3>
+                    <p>Незнакомцы могут выдавать себя за друзей и просить деньги или данные. Всегда проверяй, кто пишет.</p>
+                </div>
+                <div class="card">
+                    <img src="https://images.unsplash.com/photo-1555949963-aa79dcee981c?w=400" alt="Утечка данных">
+                    <h3>Утечка данных</h3>
+                    <p>Если сайт взломали, твои данные могут оказаться в открытом доступе. Не используй один пароль везде.</p>
+                </div>
+                <div class="card">
+                    <img src="https://images.unsplash.com/photo-1614064641938-3bbee52942c7?w=400" alt="Социальная инженерия">
+                    <h3>Социальная инженерия</h3>
+                    <p>Мошенники манипулируют людьми, чтобы получить данные: звонят от имени банка, пишут от лица друзей, давят на эмоции. Никогда не сообщай коды и пароли даже «знакомым».</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- ЗАЩИТА -->
+        <div class="page" id="page-protection">
+            <img class="banner" src="https://images.unsplash.com/photo-1563013544-824ae1b704d3?w=1200" alt="Защита данных">
+            <h1>Как защититься</h1>
+            <p>Следуй этим правилам, чтобы оставаться в безопасности:</p>
+            <h2>Чек-лист: 10 шагов для защиты</h2>
+            <ul>
+                <li>Придумывай сложные пароли (минимум 12 символов).</li>
+                <li>Не используй один пароль на разных сайтах.</li>
+                <li>Включи двухфакторную аутентификацию везде, где можно.</li>
+                <li>Не переходи по подозрительным ссылкам из писем и сообщений.</li>
+                <li>Скачивай файлы только с официальных сайтов.</li>
+                <li>Обновляй систему и программы вовремя.</li>
+                <li>Не вводи личные данные на незнакомых сайтах.</li>
+                <li>Используй антивирус и регулярно проверяй устройство.</li>
+                <li>Не публикуй в открытом доступе личную информацию.</li>
+                <li>Если что-то кажется подозрительным — не рискуй, проверь.</li>
+            </ul>
+        </div>
+
+        <!-- КИБЕРГИГИЕНА -->
+        <div class="page" id="page-hygiene">
+            <img class="banner" src="https://images.unsplash.com/photo-1518770660439-4636190af475?w=1200" alt="Кибергигиена">
+            <h1>Кибергигиена</h1>
+            <p>Кибергигиена — это ежедневные привычки, которые помогают оставаться в безопасности в интернете. Как чистка зубов, только для цифровой жизни.</p>
+            <h2>Ежедневные привычки</h2>
+            <ul>
+                <li>Проверяй обновления системы и приложений.</li>
+                <li>Не переходи по ссылкам из подозрительных сообщений.</li>
+                <li>Используй разные пароли для разных сервисов.</li>
+                <li>Не вводи данные на незнакомых сайтах.</li>
+                <li>Регулярно проверяй, какие приложения имеют доступ к твоим данным.</li>
+            </ul>
+            <h2>Еженедельные привычки</h2>
+            <ul>
+                <li>Проверяй, не было ли утечек на сайтах, где ты зарегистрирован.</li>
+                <li>Очищай кэш и временные файлы на устройстве.</li>
+                <li>Проверяй подозрительные входы в свои аккаунты.</li>
+            </ul>
+            <h2>Раз в месяц</h2>
+            <ul>
+                <li>Меняй пароли на важных сервисах (почта, соцсети).</li>
+                <li>Проверяй устройство антивирусом.</li>
+                <li>Просматривай, какие приложения больше не нужны — удаляй их.</li>
+            </ul>
+        </div>
+
+        <!-- О ПРОЕКТЕ -->
+        <div class="page" id="page-about">
+            <img class="banner" src="https://images.unsplash.com/photo-1451187580459-43490279c0fa?w=1200" alt="О проекте">
+            <h1>О проекте</h1>
+            <p>Этот сайт — учебный проект, созданный учеником 10 "А" класса. Его цель — помочь школьникам разобраться в основах кибербезопасности и научиться защищать свои данные в интернете.</p>
+            <h2>Зачем это нужно?</h2>
+            <p>Многие школьники проводят в сети по несколько часов в день, но не все знают, как правильно защищать свои аккаунты, пароли и личные данные. Этот сайт простым языком объясняет основные угрозы и правила безопасности.</p>
+            <h2>Что внутри?</h2>
+            <ul>
+                <li>Раздел «Угрозы» — описание основных опасностей в интернете.</li>
+                <li>Раздел «Защита» — чек-лист из 10 шагов для безопасности.</li>
+                <li>Раздел «Кибергигиена» — ежедневные привычки для защиты.</li>
+                <li>Раздел «FAQ» — ответы на частые вопросы.</li>
+                <li>Раздел «Контакты» — форма обратной связи.</li>
+            </ul>
+            <h2>Планы на будущее</h2>
+            <p>В дальнейшем сайт будет дополняться: появятся новые разделы, полезные ссылки и более подробные материалы.</p>
+            <p style="margin-top: 25px; color: #4da6ff; font-weight: 600;">Создатель проекта: Кирилл</p>
+        </div>
+
+        <!-- FAQ -->
+        <div class="page" id="page-faq">
+            <img class="banner" src="https://images.unsplash.com/photo-1521791136064-7986c2920216?w=1200" alt="Частые вопросы">
+            <h1>Частые вопросы</h1>
+            <p>Ответы на вопросы, которые часто задают школьники:</p>
+
+            <div class="faq-item">
+                <h3>Что делать, если взломали аккаунт?</h3>
+                <p>Сразу смени пароль. Если есть возможность — включи двухфакторную аутентификацию. Проверь, не привязаны ли к аккаунту чужие устройства или номера. Если не получается вернуть доступ — обратись в поддержку сервиса.</p>
+            </div>
+
+            <div class="faq-item">
+                <h3>Как понять, что сайт поддельный?</h3>
+                <p>Посмотри на адресную строку: если домен странный или содержит лишние символы — это подозрительно. Также проверь, есть ли у сайта политика конфиденциальности, контакты. Не вводи данные, если что-то смущает.</p>
+            </div>
+
+            <div class="faq-item">
+                <h3>Можно ли использовать один пароль на всех сайтах?</h3>
+                <p>Нет. Если один сайт взломают, злоумышленники получат доступ ко всем твоим аккаунтам. Используй разные пароли для каждого сервиса. Лучше — через менеджер паролей.</p>
+            </div>
+
+            <div class="faq-item">
+                <h3>Что такое двухфакторная аутентификация?</h3>
+                <p>Это дополнительный уровень защиты. Помимо пароля, нужно подтвердить вход через код из SMS, приложения или email. Даже если пароль украдут, без второго фактора войти не получится.</p>
+            </div>
+
+            <div class="faq-item">
+                <h3>Как защитить свои данные в соцсетях?</h3>
+                <p>Не публикуй личную информацию (адрес, номер телефона, школу). Настрой приватность так, чтобы твои посты видели только друзья. Не принимай заявки от незнакомцев.</p>
+            </div>
+
+            <div class="faq-item">
+                <h3>Что делать, если пришло подозрительное сообщение?</h3>
+                <p>Не переходи по ссылкам и не отвечай. Если сообщение от друга — свяжись с ним другим способом и уточни, он ли это писал. Если от незнакомца — заблокируй и пожалуйся.</p>
+            </div>
+
+        </div>
+
+        <!-- КОНТАКТЫ -->
+        <div class="page" id="page-contact">
+            <div class="form-box">
+                <h2>Обратная связь</h2>
+                <form onsubmit="event.preventDefault(); alert('Сообщение отправлено!');">
+                    <div class="form-group">
+                        <label>Имя</label>
+                        <input type="text" placeholder="Введите имя" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Email</label>
+                        <input type="email" placeholder="example@mail.com" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Сообщение</label>
+                        <textarea placeholder="Ваше сообщение..." required></textarea>
+                    </div>
+                    <button type="submit" class="btn">Отправить</button>
+                </form>
+            </div>
+        </div>
+
+    </main>
+
+    <footer>
+        © 2026 КиберБезопасность для школьников. Учебный проект.<br>
+        Создатель: <span style="color: #4da6ff; font-weight: 600; letter-spacing: 0.5px;">Кирилл</span>
+    </footer>
+
+    <button class="scroll-top" onclick="scrollToTop()" aria-label="Наверх">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M12 19V5M5 12l7-7 7 7"/>
+        </svg>
+    </button>
+
+    <script>
+        function showPage(pageId) {
+            const currentPage = document.querySelector('.page.active');
+            const newPage = document.getElementById('page-' + pageId);
+
+            if (currentPage === newPage) return;
+
+            if (currentPage) {
+                currentPage.classList.add('fade-out');
+                setTimeout(() => {
+                    currentPage.classList.remove('active', 'fade-out');
+                }, 300);
+            }
+
+            setTimeout(() => {
+                newPage.classList.add('active');
+                document.querySelectorAll('nav a').forEach(link => {
+                    link.classList.remove('active');
+                });
+                const navLink = document.getElementById('nav-' + pageId);
+                if (navLink) navLink.classList.add('active');
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            }, 250);
+        }
+
+        function toggleMenu() {
+            const nav = document.getElementById('mainNav');
+            const burger = document.querySelector('.burger');
+            nav.classList.toggle('open');
+            burger.classList.toggle('active');
+        }
+
+        function closeMenu() {
+            const nav = document.getElementById('mainNav');
+            const burger = document.querySelector('.burger');
+            nav.classList.remove('open');
+            burger.classList.remove('active');
+        }
+
+        function scrollToTop() {
+            const startPosition = window.scrollY;
+            const duration = 1000;
+            const startTime = performance.now();
+
+            function scrollStep(currentTime) {
+                const elapsed = currentTime - startTime;
+                const progress = Math.min(elapsed / duration, 1);
+
+                const easeInOut = progress < 0.5
+                    ? 4 * progress * progress * progress
+                    : 1 - Math.pow(-2 * progress + 2, 3) / 2;
+
+                window.scrollTo(0, startPosition * (1 - easeInOut));
+
+                if (progress < 1) {
+                    requestAnimationFrame(scrollStep);
+                }
+            }
+
+            requestAnimationFrame(scrollStep);
+        }
+
+        window.addEventListener('scroll', function() {
+            const btn = document.querySelector('.scroll-top');
+            if (window.scrollY > 300) {
+                btn.classList.add('visible');
+            } else {
+                btn.classList.remove('visible');
+            }
+        });
+    </script>
+
+</body>
+</html>
